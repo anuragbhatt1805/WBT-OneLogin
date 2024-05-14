@@ -1,0 +1,21 @@
+{
+  "name": "wbt-onelogin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anuragbhatt1805/WBT-OneLogin.git"
+  },
+  "author": "Anurag Bhatt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anuragbhatt1805/WBT-OneLogin/issues"
+  },
+  "homepage": "https://github.com/anuragbhatt1805/WBT-OneLogin#readme",
+  "description": ""
+}
