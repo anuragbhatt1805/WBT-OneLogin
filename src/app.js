@@ -23,7 +23,7 @@ import { groupRouter } from "./routes/usergroup.route.js";
 
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/user", userRouter);
-app.user("/api/v1/group", groupRouter);
+app.use("/api/v1/group", groupRouter);
 
 
 export { app };

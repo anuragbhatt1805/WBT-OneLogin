@@ -105,3 +105,42 @@ export const getNewOTP = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 })
+
+export const login = asyncHandler(async (req, res) => {
+    try {
+        if (!req.body.username ||!req.body.password){
+            throw new ApiError(400, "Please provide username and password");
+        }
+
+        const { username, password } = req.body;
+
+        const user = await User.findOne({username: username});
+
+        if (!user){
+            throw new ApiError(400, "User not found");
+        }
+
+        if (!user.verifyPassword(password)){
+            throw new ApiError(400, "Invalid credentials");
+        }
+
+        const { accessToken, refreshToken } = await generateToken(user._id);
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        return res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, {
+            username: user.username,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        }, "User logged in successfully"));
+
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+})
