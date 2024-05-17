@@ -144,3 +144,50 @@ export const login = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 })
+
+export const registerNewUser = asyncHandler(async (req, res) => {
+    try {
+        if (!req.params.groupId){
+            throw new ApiError(400, "Please provide user group");
+        }
+
+        const { username, email, password } = req.body;
+
+        if (!email || !password || !username){
+            throw new ApiError(400, "Please fill all default fields for User");
+        }
+
+        const groupInfo = await UserGroup.findById(req.params.groupId);
+
+        if (!groupInfo){
+            throw new ApiError(400, "User group not found");
+        }
+
+        
+
+        const extraFields = {};
+
+        for (let field of groupInfo.userGroupSchema){
+            extraFields[field.fieldName] = req.body[field.fieldName];
+        }
+
+        const newUser = await User.create({
+            username: ``,
+            email: email,
+            password: password,
+            userGroup: groupInfo._id,
+            extras: extraFields
+        });
+
+        if (!newUser){
+            throw new ApiError(500, "Failed to register user");
+        }
+
+        const user = await User.findById(newUser._id).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        return res.status(200)
+        .json(new ApiResponse(200, user, "User Added successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});

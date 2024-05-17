@@ -13,6 +13,9 @@ export const User_Schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    profileImage: {
+        type: String
+    },
     password: {
         type: String,
         required: true
