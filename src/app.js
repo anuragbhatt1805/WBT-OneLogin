@@ -4,8 +4,6 @@ import cors from "cors";
 
 const app = express();
 
-import path from "path"; // Import the 'path' module
-
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
@@ -17,16 +15,13 @@ app.use(express.urlencoded({ extended: true, limit: "10000kb" }));
 app.use(express.static("Z:/oneLogin"));
 app.use(cookieParser());
 
-import { upload } from "./middleware/multer.middleware.js";
 
-app.post('/upload', upload.fields([
-  { name: 'image', maxCount: 1 }
-]), (req, res) => {
-  const imagePath = req?.files?.image[0]?.path;
-  const imageUrl = `/uploads/${path.basename(imagePath)}`;
-  res.send(imageUrl);
-});
+// Routes for Application
+import { companyRouter } from "./routes/company.route.js";
+import { userRouter } from "./routes/user.route.js";
 
+app.use("/api/v1/company", companyRouter);
+app.use("/api/v1/user", userRouter);
 
 
 export { app };
