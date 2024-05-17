@@ -7,6 +7,8 @@ import { ApiError } from '../utils/apiError.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { sendOTP } from "../utils/mail.util.js";
 
+import { generateToken } from "./user.controller.js";
+
 export const registerCompanyAndUser = asyncHandler(async (req, res) => {
     try {
         const {
@@ -95,10 +97,21 @@ export const registerCompanyAndUser = asyncHandler(async (req, res) => {
 
         // TODO: Uncomment this line after integrating mail service
         // await sendOTP(email, name, otp.otp);
+
+        const {accessToken, refreshToken} = await generateToken(user._id);
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
         
-        return res.status(200).json(new ApiResponse(200, {
-            userId: user._id,
-            username: user.username
+        return res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, {
+            username: user.username,
+            accessToken: accessToken,
+            refreshToken: refreshToken
         }, "Company registered successfully, Please enter OTP for verification"));
     } catch (err) {
         throw new ApiError(500, err.message);

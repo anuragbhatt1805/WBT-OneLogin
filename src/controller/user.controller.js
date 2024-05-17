@@ -7,20 +7,37 @@ import { ApiError } from '../utils/apiError.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { sendOTP } from "../utils/mail.util.js";
 
+export const generateToken = async (_id) => {
+    const user = await User.findById(_id);
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save({validateBeforeSave: false});
+
+    return {accessToken, refreshToken};
+}
 
 export const verifyUserViaOTP = asyncHandler(async (req, res) => {
     try {
-        const { userId, otp } = req.body;
-        if (!userId || !otp || otp.length !== 6){
+
+        if (!req.user) {
+            throw new ApiError(400, "User not logged in");
+        }
+
+        const { otp } = req.body;
+        if (!otp || otp.length !== 6){
             throw new ApiError(400, "Please provide valid userId and OTP");
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findById(req.user._id);
+
         if (!user){
             throw new ApiError(400, "User not found");
         }
 
-        const otpData = await OTP.findOne({user: userId, otp: otp});
+        const otpData = await OTP.findOne({user: req.user._id, otp: otp});
+
         if (!otpData){
             throw new ApiError(400, "Invalid OTP");
         }
@@ -28,10 +45,9 @@ export const verifyUserViaOTP = asyncHandler(async (req, res) => {
         user.verified = true;
         await user.save();
 
-        await OTP.deleteMany({user: userId});
+        await OTP.deleteMany({user: req.user._id});
 
         return res.status(200).json(new ApiResponse(200, {
-            userId: user._id,
             username: user.username
         }, "User verified successfully"));
         

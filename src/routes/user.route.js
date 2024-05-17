@@ -5,4 +5,4 @@ import { verifyUserViaOTP } from '../controller/user.controller.js';
 
 export const userRouter = express.Router();
 
-userRouter.post('/verifyOtp/', verifyUserViaOTP);
+userRouter.post('/verifyOtp/', auth, verifyUserViaOTP);
