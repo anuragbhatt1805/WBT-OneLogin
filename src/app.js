@@ -19,9 +19,11 @@ app.use(cookieParser());
 // Routes for Application
 import { companyRouter } from "./routes/company.route.js";
 import { userRouter } from "./routes/user.route.js";
+import { groupRouter } from "./routes/usergroup.route.js";
 
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/user", userRouter);
+app.user("/api/v1/group", groupRouter);
 
 
 export { app };
