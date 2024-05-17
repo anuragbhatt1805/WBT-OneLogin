@@ -144,7 +144,7 @@ export const viewYourCompany = asyncHandler(async (req, res) => {
 
 export const viewCompanyById = asyncHandler(async (req, res) => {
     try {
-        const company = await Company.findOne({companyId: req.params.id}).select("-__v -companyColorCode.__id").populate("companyAdmin");
+        const company = await Company.findOne({companyId: req.params.id}).select("-__v -companyColorCode -companyId -companyAdmin").populate("companyAdmin");
 
         if (!company){
             throw new ApiError(404, "Company not found");
