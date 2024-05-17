@@ -26,6 +26,10 @@ export const Company_Schema = new mongoose.Schema({
         unique: true,
         uppercase: true
     },
+    companyAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     companyAddress : {
         type: String
     },
@@ -59,7 +63,7 @@ export const Company_Schema = new mongoose.Schema({
         type: String
     },
     companyColorCode:{
-        CompanyColorCode
+        type: CompanyColorCode
     }
 }, {
     timestamps: true

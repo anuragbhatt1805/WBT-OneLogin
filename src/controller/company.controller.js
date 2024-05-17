@@ -50,7 +50,11 @@ export const registerCompanyAndUser = asyncHandler(async (req, res) => {
         };
 
         if (address) company_info.companyAddress = address;
-        if (colorCode) company_info.colorCode = {primary: colorCode.primary, secondary: colorCode.secondary};
+        if (colorCode) {
+            company_info.companyColorCode = {primary: colorCode.primary, secondary: colorCode.secondary}
+        } else {
+            company_info.companyColorCode = {primary: "#6adb45", secondary: "#858889"}
+        };
         if (website) company_info.companyWebsite = website;
         if (established) company_info.companyEstablished = established;
         if (type) company_info.companyType = type;
@@ -86,6 +90,9 @@ export const registerCompanyAndUser = asyncHandler(async (req, res) => {
             throw new ApiError(500, "Failed to create user");
         }
 
+        company.companyAdmin = user._id;
+        await company.save();
+
         const otp = await OTP.create({
             user: user._id,
             otp: Math.floor(100000 + Math.random() * 900000)
@@ -113,6 +120,37 @@ export const registerCompanyAndUser = asyncHandler(async (req, res) => {
             accessToken: accessToken,
             refreshToken: refreshToken
         }, "Company registered successfully, Please enter OTP for verification"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const viewYourCompany = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const company = await Company.findOne({companyAdmin: req.user._id}).select("-__v -companyColorCode.__id").populate("companyAdmin");
+
+        if (!company){
+            throw new ApiError(404, "Company not found");
+        }
+        return res.status(200).json(new ApiResponse(200, company, "Company found successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const viewCompanyById = asyncHandler(async (req, res) => {
+    try {
+        const company = await Company.findOne({companyId: req.params.id}).select("-__v -companyColorCode.__id").populate("companyAdmin");
+
+        if (!company){
+            throw new ApiError(404, "Company not found");
+        }
+
+        return res.status(200).json(new ApiResponse(200, company, "Company found successfully"));
     } catch (err) {
         throw new ApiError(500, err.message);
     }

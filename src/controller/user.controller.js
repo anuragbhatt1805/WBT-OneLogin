@@ -43,7 +43,7 @@ export const verifyUserViaOTP = asyncHandler(async (req, res) => {
         }
 
         user.verified = true;
-        await user.save();
+        await user.save({validateBeforeSave: false});
 
         await OTP.deleteMany({user: req.user._id});
 
@@ -51,6 +51,56 @@ export const verifyUserViaOTP = asyncHandler(async (req, res) => {
             username: user.username
         }, "User verified successfully"));
         
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+})
+
+export const getNewOTP = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(400, "User not logged in");
+        }
+
+        const user = await User.findById(req.user._id);
+
+        if (!user){
+            throw new ApiError(400, "User not found");
+        }
+
+        if (user.verified){
+            throw new ApiError(400, "User already verified");
+        }
+
+        const otp = await OTP.findOne({user: req.user._id});
+
+        if (!otp) {
+            const newOtp = await OTP.create({
+                user: req.user._id,
+                otp: Math.floor(100000 + Math.random() * 900000)
+            });
+            
+            if (!newOtp){
+                throw new ApiError(500, "Failed to send OTP");
+            }
+
+            // TODO: Uncomment this line after integrating mail service
+            // await sendOTP(user.email, newOtp.otp);
+
+            return res.status(200).json(new ApiResponse(200, {
+                username: user.username
+            }, "OTP sent successfully"));
+        } else {
+            otp.otp = Math.floor(100000 + Math.random() * 900000);
+            await otp.save();
+
+            // TODO: Uncomment this line after integrating mail service
+            // await sendOTP(user.email, otp.otp);
+
+            return res.status(200).json(new ApiResponse(200, {
+                username: user.username
+            }, "OTP sent successfully"));
+        }
     } catch (err) {
         throw new ApiError(500, err.message);
     }
