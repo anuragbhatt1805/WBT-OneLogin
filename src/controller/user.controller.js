@@ -163,7 +163,7 @@ export const registerNewUser = asyncHandler(async (req, res) => {
             throw new ApiError(400, "User group not found");
         }
 
-        
+        const companyInfo = await Company.findById(groupInfo.company);
 
         const extraFields = {};
 
@@ -172,7 +172,7 @@ export const registerNewUser = asyncHandler(async (req, res) => {
         }
 
         const newUser = await User.create({
-            username: ``,
+            username: `${companyInfo.companyId}-${username}`,
             email: email,
             password: password,
             userGroup: groupInfo._id,
