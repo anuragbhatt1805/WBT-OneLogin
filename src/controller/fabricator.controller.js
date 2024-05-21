@@ -20,7 +20,8 @@ export const createFabricator = asyncHandler(async (req, res) => {
             throw new ApiError(500, 'Fabricator not created');
         }
 
-        return new ApiResponse(201, fabricator, 'Fabricator created successfully');
+        return res.status(200)
+        .json(new ApiResponse(201, fabricator, 'Fabricator created successfully'));
     } catch (error) {
         throw new ApiError(500, error.message);
     }
@@ -40,7 +41,8 @@ export const getFabricatorsById = asyncHandler(async (req, res) => {
             throw new ApiError(404, 'Fabricator not found');
         }
 
-        return new ApiResponse(200, fabricator, 'Fabricator found');
+        return res.status(200)
+        .json(new ApiResponse(200, fabricator, 'Fabricator found'));
     } catch (error) {
         throw new ApiError(500, error.message);
     }
@@ -54,7 +56,8 @@ export const getAllFabricators = asyncHandler(async (req, res) => {
             throw new ApiError(404, 'No Fabricators found');
         }
 
-        return new ApiResponse(200, fabricators, 'Fabricators found');
+        return res.status(200)
+        .json(new ApiResponse(200, fabricators, 'Fabricators found'));
     } catch (error) {
         throw new ApiError(500, error.message);
     }
