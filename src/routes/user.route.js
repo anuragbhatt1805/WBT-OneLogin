@@ -17,6 +17,6 @@ userRouter.post('/regsiter/:groupId/', auth, registerNewUser);
 userRouter.post('/verifyOtp/', auth, verifyUserViaOTP);
 
 userRouter.get('/', auth, getUser);
-userRouter.get('/:username/', auth, getUserByUsername);
 userRouter.get('/all/', auth, getAllUsers);
 userRouter.get('/all/:groupId/', auth, getUserByGroup);
+userRouter.get('/:username/', auth, getUserByUsername);
