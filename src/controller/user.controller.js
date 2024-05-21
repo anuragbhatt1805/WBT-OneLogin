@@ -261,3 +261,47 @@ export const getAllUsers = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const getUserByGroup = asyncHandler( async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const group = await UserGroup.findById(req.params.groupId);
+
+        if (!group){
+            throw new ApiError(404, "Group not found");
+        }
+
+        const allUsers = await User.find({userGroup: req.params.groupId}).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!allUsers) {
+            throw new ApiError(404, "No users found");
+        }
+
+        return res.status(200)
+        .json(new ApiResponse(200, allUsers, "Users retrieved successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const getUserByUsername = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const user = await User.findOne({username: req.params.username}).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!user){
+            throw new ApiError(404, "User not found");
+        }
+
+        return res.status(200)
+        .json(new ApiResponse(200, user, "User fetched successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});

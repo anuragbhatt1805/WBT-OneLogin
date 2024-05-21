@@ -3,7 +3,7 @@ import { upload } from "../middleware/multer.middleware.js";
 import { auth } from '../middleware/auth.middleware.js';
 import { 
     verifyUserViaOTP, getNewOTP, login, registerNewUser,
-    logout, getUser, getAllUsers
+    logout, getUser, getAllUsers, getUserByGroup, getUserByUsername
  } from '../controller/user.controller.js';
 
 export const userRouter = express.Router();
@@ -17,4 +17,6 @@ userRouter.post('/regsiter/:groupId/', auth, registerNewUser);
 userRouter.post('/verifyOtp/', auth, verifyUserViaOTP);
 
 userRouter.get('/', auth, getUser);
+userRouter.get('/:username/', auth, getUserByUsername);
 userRouter.get('/all/', auth, getAllUsers);
+userRouter.get('/all/:groupId/', auth, getUserByGroup);
