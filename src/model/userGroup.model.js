@@ -41,7 +41,7 @@ export const UserGroup_Schema = new mongoose.Schema({
     accessLevel: {
         type: String,
         required: true,
-        enum: ["admin", "manager", "team_lead", "team_member", "guest"]
+        enum: ["admin", "manager", "team_lead", "team_manager", "user", "guest"]
     },
     userGroupSchema: [
         UserSchema
