@@ -248,6 +248,11 @@ export const getAllUsers = asyncHandler(async (req, res) => {
         if ("verified" in req.query) {
             data.verified = req.query.verified;
         }
+        if ("extra" in req.query) {
+            for (let key in req.query.extra){
+                data[`extras.${key}`] = req.query.extra[key];
+            }
+        }
 
         const allUsers = await User.find(data).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
 
