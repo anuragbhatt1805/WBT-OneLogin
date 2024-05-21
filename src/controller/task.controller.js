@@ -276,3 +276,21 @@ export const commentTask = asyncHandler( async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const getTaskById = asyncHandler( async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const task = await Task.findById(req.params.taskId).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
+
+        if (!task) {
+            throw new ApiError(404, "Task not found");
+        }
+
+        return res.status(200).json(new ApiResponse(200, task, "Task fetched successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});

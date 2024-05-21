@@ -10,6 +10,7 @@ import {
     getAllTask,
     commentTask,
     getTaskComments,
+    getTaskById
 } from '../controller/task.controller.js';
 
 export const taskRouter = express.Router();
@@ -19,6 +20,8 @@ taskRouter.post('/create/', auth, createTask);
 taskRouter.get('/', auth, getTask);
 
 taskRouter.get('/all', auth, getAllTask);
+
+taskRouter.get('/:taskId/', auth, getTaskById);
 
 taskRouter.get('/:taskId/accept/', auth, acceptTask);
 
