@@ -8,3 +8,7 @@ import {
 } from '../controllers/project.controller.js';
 
 export const projectRouter = express.Router();
+
+projectRouter.post('/create/', auth, createProject);
+projectRouter.get('/all/', auth, getProjectAllProjects);
+projectRouter.get('/:projectId', auth, getProject);

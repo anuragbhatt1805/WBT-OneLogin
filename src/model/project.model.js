@@ -50,7 +50,9 @@ export const Project_Schema = new mongoose.Schema({
         type: Team_Work_Schema,
     },
     teamLeader: {
-        type: Team_Work_Schema,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     active: {
         type: Boolean,
