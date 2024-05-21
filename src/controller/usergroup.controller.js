@@ -70,7 +70,7 @@ export const getAllGroups = asyncHandler(async (req, res) => {
             company: tempgroups.company,
         }
 
-        if (req.query.access){
+        if ("access" in req.query){
             data.accessLevel = req.query.access;
         }
 

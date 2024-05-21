@@ -242,10 +242,10 @@ export const getAllUsers = asyncHandler(async (req, res) => {
         }
 
         const data = {};
-        if (req.query.group){
+        if ("group" in req.query){
             data.userGroup = req.query.group;
         }
-        if (req.query.verified) {
+        if ("verified" in req.query) {
             data.verified = req.query.verified;
         }
 
