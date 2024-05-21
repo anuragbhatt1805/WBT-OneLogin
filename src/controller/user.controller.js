@@ -191,3 +191,69 @@ export const registerNewUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const logout = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        if (!user){
+            throw new ApiError(400, "User not found");
+        }
+
+        user.refreshToken = "";
+        await user.save({validateBeforeSave: false});
+
+        return res.status(200)
+        .clearCookie("accessToken")
+        .clearCookie("refreshToken")
+        .json(new ApiResponse(200, {}, "User logged out successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const getUser = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const user = await User.findById(req.user._id).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!user){
+            throw new ApiError(400, "User not found");
+        }
+
+        return res.status(200)
+        .json(new ApiResponse(200, user, "User fetched successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        const data = {};
+        if (req.query.group){
+            data.userGroup = req.query.group;
+        }
+        if (req.query.verified) {
+            data.verified = req.query.verified;
+        }
+
+        const allUsers = await User.find(data).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!allUsers) {
+            throw new ApiError(404, "No users found");
+        }
+
+        return res.status(200)
+        .json(new ApiResponse(200, allUsers, "Users retrieved successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
