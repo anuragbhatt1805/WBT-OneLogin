@@ -5,15 +5,16 @@ export const sendOTP = async (email, name, otp) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
             auth: {
-                user: process.env.GMAIL_MAIL, // Your Gmail address
-                pass: process.env.GMAIL_PASS  // Your Gmail password
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASS
             }
         });
 
         const mailOptions = {
-            from: process.env.GMAIL_EMAIL,
+            from: process.env.GMAIL_MAIL,
             to: email,
             subject: 'OTP for Email Verification on OneLogin',
             html: html_data
