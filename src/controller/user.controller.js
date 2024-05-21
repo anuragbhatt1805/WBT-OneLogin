@@ -163,6 +163,10 @@ export const registerNewUser = asyncHandler(async (req, res) => {
             throw new ApiError(400, "User group not found");
         }
 
+        if (groupInfo.accessLevel !== "admin" || groupInfo.accessLevel !== "manager"){
+            throw new ApiError(400, "Only admin or manager can add new users");
+        }
+
         const companyInfo = await Company.findById(groupInfo.company);
 
         const extraFields = {};
