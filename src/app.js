@@ -20,10 +20,12 @@ app.use(cookieParser());
 import { companyRouter } from "./routes/company.route.js";
 import { userRouter } from "./routes/user.route.js";
 import { groupRouter } from "./routes/usergroup.route.js";
+import { fabricatorRouter } from "./routes/fabricator.route.js";
 
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/group", groupRouter);
+app.use("/api/v1/fabricator", fabricatorRouter);
 
 
 export { app };
