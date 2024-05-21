@@ -13,15 +13,15 @@ export const createFabricator = asyncHandler(async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
-        const { name, description } = req.body;
+        const { name, info } = req.body;
 
-        if (!name) {
-            throw new ApiError(400, 'Name is required');
+        if (!name || !info) {
+            throw new ApiError(400, 'All fields are required');
         }
 
         const fabricator = await Fabricator.create({
             name: name,
-            description: description? description : ''
+            clientInformation: info
         });
 
         if (!fabricator) {

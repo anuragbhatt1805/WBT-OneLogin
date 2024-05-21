@@ -6,8 +6,9 @@ export const Fabricator_Schema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    description : {
-        type: String
+    clientInformation: {
+        type: String,
+        required: true
     },
     active: {
         type: Boolean,
