@@ -1,0 +1,10 @@
+import express from 'express';
+import { upload } from "../middleware/multer.middleware.js";
+import { auth } from '../middleware/auth.middleware.js';
+import {
+    createProject,
+    getProjectAllProjects,
+    getProject,
+} from '../controllers/project.controller.js';
+
+export const projectRouter = express.Router();
