@@ -85,7 +85,7 @@ export const getNewOTP = asyncHandler(async (req, res) => {
             }
 
             // TODO: Uncomment this line after integrating mail service
-            // await sendOTP(user.email, newOtp.otp);
+            await sendOTP(user.email, user.username, newOtp.otp);
 
             return res.status(200).json(new ApiResponse(200, {
                 username: user.username
@@ -95,7 +95,7 @@ export const getNewOTP = asyncHandler(async (req, res) => {
             await otp.save();
 
             // TODO: Uncomment this line after integrating mail service
-            // await sendOTP(user.email, otp.otp);
+            await sendOTP(user.email, user.username, otp.otp);
 
             return res.status(200).json(new ApiResponse(200, {
                 username: user.username
@@ -222,6 +222,10 @@ export const getUser = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const user = await User.findById(req.user._id).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
 
         if (!user){
@@ -240,6 +244,10 @@ export const getAllUsers = asyncHandler(async (req, res) => {
         if (!req.user){
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const data = {};
         if ("group" in req.query){
@@ -273,6 +281,10 @@ export const getUserByGroup = asyncHandler( async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const group = await UserGroup.findById(req.params.groupId);
 
         if (!group){
@@ -297,6 +309,10 @@ export const getUserByUsername = asyncHandler(async (req, res) => {
         if (!req.user){
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const user = await User.findOne({username: req.params.username}).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
 

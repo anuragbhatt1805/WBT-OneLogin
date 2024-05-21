@@ -131,6 +131,10 @@ export const viewYourCompany = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const company = await Company.findOne({companyAdmin: req.user._id}).select("-__v -companyColorCode.__id").populate("companyAdmin");
 
         if (!company){

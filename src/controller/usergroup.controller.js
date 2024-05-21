@@ -11,6 +11,10 @@ export const createNewGroup = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { company, name, description, accessLevel } = req.body;
         const { groupSchema } = req.body;
 
@@ -64,6 +68,11 @@ export const getAllGroups = asyncHandler(async (req, res) => {
         if (!req.user){
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const tempgroups = await UserGroup.findById(req.user.userGroup).select("-__v -userGroupSchema.__id");
 
         const data = {
@@ -92,6 +101,10 @@ export const getGroup = asyncHandler(async (req, res) => {
         if (!req.user){
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const group = await UserGroup.findById(req.params.groupId).populate("company");
 

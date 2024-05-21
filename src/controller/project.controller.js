@@ -8,6 +8,14 @@ import { ApiResponse } from '../utils/apiResponse.js';
 
 export const createProject = asyncHandler(async (req, res) => {
     try {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { name, description } = req.body;
         const { fabricator } = req.body;
         const { dueDate } = req.body;
@@ -164,6 +172,10 @@ export const getProject = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { projectId } = req.params;
 
         if (!projectId) {
@@ -193,6 +205,10 @@ export const getProjectAllProjects = asyncHandler(async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const data = {};
 

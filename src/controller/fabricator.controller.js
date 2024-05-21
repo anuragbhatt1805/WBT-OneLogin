@@ -5,6 +5,14 @@ import { Fabricator, User } from '../model/index.js';
 
 export const createFabricator = asyncHandler(async (req, res) => {
     try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { name, description } = req.body;
 
         if (!name) {
@@ -29,6 +37,14 @@ export const createFabricator = asyncHandler(async (req, res) => {
 
 export const getFabricatorsById = asyncHandler(async (req, res) => {
     try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { id } = req.params;
 
         if (!id) {
@@ -50,6 +66,14 @@ export const getFabricatorsById = asyncHandler(async (req, res) => {
 
 export const getAllFabricators = asyncHandler(async (req, res) => {
     try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+        
         const fabricators = await Fabricator.find();
 
         if (!fabricators) {

@@ -15,6 +15,10 @@ export const createTask = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const { project, assignedUser, title, description, startDate, dueDate } = req.body;
 
         if (!project || !assignedUser || !title || !description || !startDate || !dueDate) {
@@ -63,6 +67,10 @@ export const getTask = asyncHandler( async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const task = await Task.find({currentUser: req.user._id}).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
 
         if (!task) {
@@ -80,6 +88,10 @@ export const getAllTask = asyncHandler( async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const data = {}
 
@@ -133,6 +145,10 @@ export const acceptTask = asyncHandler( async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const task = await Task.findById(req.params.taskId);
 
         if (!task) {
@@ -157,6 +173,10 @@ export const approveTask = asyncHandler( async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const task = await Task.findById(req.params.taskId);
 
@@ -193,6 +213,10 @@ export const assignTask = asyncHandler( async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const task = await Task.findById(req.params.taskId);
 
@@ -236,6 +260,10 @@ export const getTaskComments = asyncHandler( async (req, res) => {
             throw new ApiError(401, "Unauthorized");
         }
 
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
         const task = await Task.findById(req.params.taskId).populate('comments.commentedBy');
 
         if (!task) {
@@ -253,6 +281,10 @@ export const commentTask = asyncHandler( async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const task = await Task.findById(req.params.taskId);
 
@@ -282,6 +314,10 @@ export const getTaskById = asyncHandler( async (req, res) => {
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
 
         const task = await Task.findById(req.params.taskId).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
 
