@@ -10,7 +10,7 @@ import {
     getAllTask,
     commentTask,
     getTaskComments,
-} from '../controllers/task.controller.js';
+} from '../controller/task.controller.js';
 
 export const taskRouter = express.Router();
 

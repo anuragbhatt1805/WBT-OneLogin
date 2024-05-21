@@ -5,7 +5,7 @@ import {
     createProject,
     getProjectAllProjects,
     getProject,
-} from '../controllers/project.controller.js';
+} from '../controller/project.controller.js';
 
 export const projectRouter = express.Router();
 
