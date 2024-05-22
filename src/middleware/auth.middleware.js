@@ -6,10 +6,10 @@ import { logError } from "../utils/log.util.js";
 
 export const auth = asyncHandler(async (req, res, next) => {
     try {
-        const token = req.cookies?.accessToken || req.headers("Authorization")?.replace("Bearer ", "");
+        const token = req?.cookies?.accessToken || req?.headers("Authorization")?.replace("Bearer ", "");
         console.log(token);
-        console.log(req.cookies);
-        console.log(req.headers)
+        console.log(req?.cookies);
+        console.log(req?.headers)
 
         if (!token) {
             throw new ApiError(401, "Unauthorized");
