@@ -61,6 +61,16 @@ export const Project_Schema = new mongoose.Schema({
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    stage: {
+        type: String,
+        default: 'IFA',
+        enum: ['IFA', 'BFA', 'RIFA', 'BFA', 'IFC', 'REV'] 
+    },
+    status: {
+        type: String,
+        default: 'ON-HOLD',
+        enum: ['ON-HOLD', 'APPROVED', 'COMPLETED']
     }
 }, {
     timestamps: true

@@ -263,3 +263,130 @@ export const getProjectAllProjects = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const updateProject = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
+        const { projectId } = req.params;
+
+        if (!projectId) {
+            throw new ApiError(400, "Project ID is required");
+        }
+
+        const project = await Project.findById(projectId);
+
+        if (!project) {
+            throw new ApiError(404, "Project not found");
+        }
+
+        const data = {};
+
+        if ("name" in req.body) {
+            throw new ApiError(400, "Project name cannot be updated");
+        }
+
+        if ("description" in req.body) {
+            data.description = req.body.description;
+        }
+
+        if ("fabricator" in req.body){
+            const fabricator = await Fabricator.findById("fabricator");
+            if (!fabricator) {
+                throw new ApiError(404, "Fabricator not found");
+            }
+            data.fabricator = fabricator._id;
+        }
+
+        if ("dueDate" in req.body) {
+            data.dueDate = new Date(req.body.dueDate);
+        }
+
+        if ("teamLeader" in req.body) {
+            const teamLeader = await User.findById(req.body.teamLeader);
+            if (!teamLeader) {
+                throw new ApiError(404, "Team Leader not found");
+            }
+            data.teamLeader = teamLeader._id;
+        }
+
+        if ("stage" in req.body){
+            data.stage = req.body.stage;
+        }
+
+        if ("status" in req.body){
+            data.status = req.body.status;
+        }
+
+        if ("modeler" in req.body) {
+            const modeler = await User.findById(req.body.modeler);
+            if (!modeler) {
+                throw new ApiError(404, "Modeler not found");
+            }
+            data.modeler = {
+                user: modeler._id
+            };
+        }
+
+        if ("checker" in req.body) {
+            const checker = await User.findById(req.body.checker);
+            if (!checker) {
+                throw new ApiError(404, "Checker not found");
+            }
+            data.checker = {
+                user: checker._id
+            };
+        }
+
+        if ("erecter" in req.body) {
+            const erecter = await User.findById(req.body.erecter);
+            if (!erecter) {
+                throw new ApiError(404, "Erecter not found");
+            }
+            data.erecter = {
+                user: erecter._id
+            };
+        }
+
+        if ("detailer" in req.body) {
+            const detailer = await User.findById(req.body.detailer);
+            if (!detailer) {
+                throw new ApiError(404, "Detailer not found");
+            }
+            data.detailer = {
+                user: detailer._id
+            };
+        }
+
+        if ("modelerStart" in req.body) {
+            data.modeler.startDate = new Date(req.body.modelerStart);
+        }
+
+        if ("checkerStart" in req.body) {
+            data.checker.startDate = new Date(req.body.checkerStart);
+        }
+
+        if ("erecterStart" in req.body) {
+            data.erecter.startDate = new Date(req.body.erecterStart);
+        }
+
+        if ("detailerStart" in req.body) {
+            data.detailer.startDate = new Date(req.body.detailerStart);
+        }
+
+        const updatedProject = await Project.findByIdAndUpdate(project._id, data, { new: true })
+        .populate('fabricator modeler checker erecter detailer teamLeader');
+
+        return res.status(200)
+        .json(new ApiResponse(200, updatedProject, "Project updated successfully"));
+
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});

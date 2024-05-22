@@ -5,6 +5,7 @@ import {
     createProject,
     getProjectAllProjects,
     getProject,
+    updateProject
 } from '../controller/project.controller.js';
 
 export const projectRouter = express.Router();
@@ -12,3 +13,4 @@ export const projectRouter = express.Router();
 projectRouter.post('/create/', auth, createProject);
 projectRouter.get('/all/', auth, getProjectAllProjects);
 projectRouter.get('/:projectId', auth, getProject);
+projectRouter.post('/:projectId/update', auth, updateProject);
