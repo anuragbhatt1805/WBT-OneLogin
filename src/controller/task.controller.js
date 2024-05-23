@@ -99,6 +99,10 @@ export const getAllTask = asyncHandler( async (req, res) => {
             data.project = req.query.project;
         }
 
+        if ("fabricator" in req.query) {
+            data.project.fabricator = req.query.fabricator;
+        }
+
         if ("createdBy" in req.query) {
             data.createdBy = req.query.createdBy;
         }
@@ -127,7 +131,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
             data.status = req.query.status;
         }
 
-        const task = await Task.find(data).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
+        const task = await Task.find(data).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate('project.fabricator');
 
         if (!task) {
             throw new ApiError(404, "Task not found");
@@ -138,6 +142,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
 
 export const acceptTask = asyncHandler( async (req, res) => {
     try {
