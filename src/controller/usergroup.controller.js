@@ -15,23 +15,23 @@ export const createNewGroup = asyncHandler(async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
-        const { company, name, description, accessLevel } = req.body;
+        const { name, description, accessLevel } = req.body;
         const { groupSchema } = req.body;
 
-        const companyExist = await Company.findById(company);
+        const companyExist = await Company.findById("664731d8e7b273696c95c368");
 
         if (!companyExist) {
             throw new ApiError(404, "Company not found");
         }
 
-        const groupExist = await UserGroup.findOne({ company: company, userGroupName: name });
+        const groupExist = await UserGroup.findOne({ company: companyExist._id, userGroupName: name });
 
         if (groupExist) {
             throw new ApiError(400, "Group already exists");
         }
 
         const group_data = await UserGroup.create({
-            company: company,
+            company: companyExist._id,
             userGroupName: name,
             userGroupDescription: description,
             accessLevel: accessLevel
@@ -113,6 +113,32 @@ export const getGroup = asyncHandler(async (req, res) => {
         } else {
             throw new ApiError(404, "Group not found");
         }
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});
+
+export const updateGroup = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
+        const data = {};
+
+        if ("name" in req.body){
+            data.userGroupName = req.body.name;
+        }
+
+        if ("description" in req.body){
+            data.userGroupDescription = req.body.description;
+        }
+
+
     } catch (err) {
         throw new ApiError(500, err.message);
     }
