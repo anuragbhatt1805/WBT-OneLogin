@@ -138,6 +138,43 @@ export const updateGroup = asyncHandler(async (req, res) => {
             data.userGroupDescription = req.body.description;
         }
 
+        if ("accessLevel" in req.body){
+            data.accessLevel = req.body.accessLevel;
+        }
+
+        const group = await UserGroup.findByIdAndUpdate(req.params.groupId, data, { new: true });
+        await group.save();
+
+        if ("groupSchema" in req.body) {
+            for (let i = 0; i < req.body.groupSchema.length; i++) {
+                const fieldName = req.body.groupSchema[i].fieldName;
+                const fieldType = req.body.groupSchema[i].fieldType;
+                const fieldRequired = req.body.groupSchema[i].fieldRequired ? req.body.groupSchema[i].fieldRequired : false;
+                const fieldUnique = req.body.groupSchema[i].fieldUnique ? req.body.groupSchema[i].fieldUnique : false;
+                const fieldDefault = req.body.groupSchema[i].fieldDefault;
+        
+                const existingSchemaIndex = group.userGroupSchema.findIndex(schema => schema.fieldName === fieldName);
+        
+                if (existingSchemaIndex !== -1) {
+                    group.userGroupSchema[existingSchemaIndex].fieldType = fieldType;
+                    group.userGroupSchema[existingSchemaIndex].fieldRequired = fieldRequired;
+                    group.userGroupSchema[existingSchemaIndex].fieldUnique = fieldUnique;
+                    group.userGroupSchema[existingSchemaIndex].fieldDefault = fieldDefault;
+                } else {
+                    group.userGroupSchema.push({
+                        fieldName: fieldName,
+                        fieldType: fieldType,
+                        fieldRequired: fieldRequired,
+                        fieldUnique: fieldUnique,
+                        fieldDefault: fieldDefault
+                    });
+                }
+            }
+            await group.save();
+        }
+        
+
+        return res.status(200).json(new ApiResponse(200, group, "Group updated successfully"));
 
     } catch (err) {
         throw new ApiError(500, err.message);
