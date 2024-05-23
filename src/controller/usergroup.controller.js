@@ -33,7 +33,7 @@ export const createNewGroup = asyncHandler(async (req, res) => {
         const group_data = await UserGroup.create({
             company: companyExist._id,
             userGroupName: name,
-            userGroupDescription: description,
+            userGroupDescription: (description) ? description : "",
             accessLevel: accessLevel
         })
 
@@ -84,6 +84,10 @@ export const getAllGroups = asyncHandler(async (req, res) => {
         }
 
         const allGroups = await UserGroup.find(data).populate("company");
+        for (let i = 0; i < allGroups.length; i++){
+            const userCount = await User.countDocuments({ userGroup: allGroups[i]._id });
+            allGroups[i].userCount = userCount;
+        }
 
         if (!allGroups) {
             throw new ApiError(404, "No groups found");
