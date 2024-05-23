@@ -6,7 +6,11 @@ export const Fabricator_Schema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    clientInformation: {
+    clientName: {
+        type: String,
+        required: true
+    },
+    clientPhone: {
         type: String,
         required: true
     },
