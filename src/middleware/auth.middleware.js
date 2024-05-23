@@ -6,7 +6,7 @@ import { logError } from "../utils/log.util.js";
 
 export const auth = asyncHandler(async (req, res, next) => {
     try {
-        const token = req?.cookies?.accessToken || req?.headers("Authorization")?.replace("Bearer ", "");
+        const token = req?.headers("Authorization")?.replace("Bearer ", "") || req?.cookies?.accessToken;
         console.log(token);
         console.log(req?.cookies);
         console.log(req?.headers)
