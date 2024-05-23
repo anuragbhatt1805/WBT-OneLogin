@@ -84,9 +84,13 @@ export const getAllGroups = asyncHandler(async (req, res) => {
         }
 
         const allGroups = await UserGroup.find(data);
+
         for (let i = 0; i < allGroups.length; i++){
             const userCount = await User.countDocuments({ userGroup: allGroups[i]._id });
-            allGroups[i].userCount = userCount;
+            allGroups[i] = {
+                ...allGroups[i]._doc,
+                userCount
+            };
         }
 
         if (!allGroups) {
