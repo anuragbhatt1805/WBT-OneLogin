@@ -83,7 +83,7 @@ export const getAllGroups = asyncHandler(async (req, res) => {
             data.accessLevel = req.query.access;
         }
 
-        const allGroups = await UserGroup.find(data).populate("company");
+        const allGroups = await UserGroup.find(data);
         for (let i = 0; i < allGroups.length; i++){
             const userCount = await User.countDocuments({ userGroup: allGroups[i]._id });
             allGroups[i].userCount = userCount;
