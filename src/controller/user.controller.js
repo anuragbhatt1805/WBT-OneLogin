@@ -151,9 +151,9 @@ export const registerNewUser = asyncHandler(async (req, res) => {
             throw new ApiError(400, "Please provide user group");
         }
 
-        const { username, email, password } = req.body;
+        const { username, name, email, password } = req.body;
 
-        if (!email || !password || !username){
+        if (!email || !password || !username || !name){
             throw new ApiError(400, "Please fill all default fields for User");
         }
 
@@ -176,6 +176,7 @@ export const registerNewUser = asyncHandler(async (req, res) => {
         }
 
         const newUser = await User.create({
+            name: name.trim(),
             username: `${companyInfo.companyId}-${username}`,
             email: email,
             password: password,

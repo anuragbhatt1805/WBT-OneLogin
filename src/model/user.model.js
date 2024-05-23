@@ -13,6 +13,10 @@ export const User_Schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    name: {
+        type: String,
+        required: true
+    },
     profileImage: {
         type: String
     },
