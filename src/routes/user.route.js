@@ -2,7 +2,7 @@ import express from 'express';
 import { upload } from "../middleware/multer.middleware.js";
 import { auth } from '../middleware/auth.middleware.js';
 import { 
-    verifyUserViaOTP, getNewOTP, login, registerNewUser,
+    verifyUserViaOTP, getNewOTP, login, registerNewUser, updateUser,
     logout, getUser, getAllUsers, getUserByGroup, getUserByUsername
  } from '../controller/user.controller.js';
 
@@ -20,3 +20,4 @@ userRouter.get('/', auth, getUser);
 userRouter.get('/all/', auth, getAllUsers);
 userRouter.get('/all/:groupId/', auth, getUserByGroup);
 userRouter.get('/:username/', auth, getUserByUsername);
+userRouter.put('/:username/update', auth, upload.single('profileImage'), updateUser);

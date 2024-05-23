@@ -12,4 +12,4 @@ groupRouter.get('/all/', auth, getAllGroups);
 
 groupRouter.get('/:groupId', auth, getGroup);
 
-groupRouter.get('/:groupId/update', auth, updateGroup);
+groupRouter.put('/:groupId/update', auth, updateGroup);

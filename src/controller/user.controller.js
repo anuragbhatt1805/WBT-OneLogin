@@ -326,3 +326,52 @@ export const getUserByUsername = asyncHandler(async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const updateUser = asyncHandler(async (req, res) => {
+    try{
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
+        const user = await User.find({username: req?.user?.username}).populate("userGroup").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!req.user.userGroup.accessLevel !== "admin" 
+            || !req.user.userGroup.accessLevel !== "manager"
+            || !req.user._id !== user._id){
+            throw new ApiError(400, "Only admin or manager can update user");
+        }
+
+        const group = await UserGroup.findById(req.user.userGroup._id);
+
+        const updatedFields = {};
+
+        if ("profileImage" in req.file){
+            updatedFields.profileImage = req?.file?.profileImage?.path;
+        }
+
+        for (let field of group.userGroupSchema){
+            if (field.fieldName in req.body){
+                updatedFields.extras[field.fieldName] = req.body[field.fieldName];
+            }
+        }
+
+        if ("email" in req.body){
+            updatedFields.email = req.body.email;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user._id, updatedFields, {new: true}).populate("userGroup userGroup.company").select("-password -access_token -refresh_token -__v -createdAt -updatedAt");
+
+        if (!updatedUser){
+            throw new ApiError(500, "Failed to update user");
+        }
+
+        return res.status(200)
+        .json(new ApiResponse(200, updatedUser, "User updated successfully"));
+    } catch (err) {
+        throw new ApiError(500, err.message);
+    }
+});

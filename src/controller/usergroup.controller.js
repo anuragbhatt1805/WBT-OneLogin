@@ -128,6 +128,10 @@ export const updateGroup = asyncHandler(async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
+        if (req.user.userGroup.accessLevel !== "admin" || req.user.userGroup.accessLevel !== "manager"){
+            throw new ApiError(403, "Forbidden");
+        }
+
         const data = {};
 
         if ("name" in req.body){
