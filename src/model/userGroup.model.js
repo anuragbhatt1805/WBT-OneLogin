@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     fieldType: {
         type: String,
         required: true,
-        enum: ["Text", "Number", "Date", "Boolean", "List", "Object"]
+        enum: ["text", "number", "date", "boolean", "list", "object", "file"]
     },
     fieldRequired: {
         type: Boolean,

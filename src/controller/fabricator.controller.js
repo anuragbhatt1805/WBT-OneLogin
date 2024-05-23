@@ -86,3 +86,44 @@ export const getAllFabricators = asyncHandler(async (req, res) => {
         throw new ApiError(500, error.message);
     }
 });
+
+export const updateFabricator = asyncHandler(async (req, res) => {
+    try {
+        if (!req.user){
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
+        const { id } = req.params;
+
+        if (!id) {
+            throw new ApiError(400, 'Invalid Fabricator ID');
+        }
+
+        const { name, info } = req.body;
+
+        if (!name ||!info) {
+            throw new ApiError(400, 'All fields are required');
+        }
+
+        const fabricator = await Fabricator.findById(id);
+
+        if (!fabricator) {
+            throw new ApiError(404, 'Fabricator not found');
+        }
+
+        fabricator.name = name;
+        fabricator.clientInformation = info;
+
+        await fabricator.save();
+
+        return res.status(200)
+       .json(new ApiResponse(200, fabricator, 'Fabricator updated successfully'));
+       
+    } catch (error) {
+        throw new ApiError(500, error.message);
+    }
+});

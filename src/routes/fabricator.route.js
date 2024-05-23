@@ -3,7 +3,8 @@ import { auth } from '../middleware/auth.middleware.js';
 import { 
     createFabricator, 
     getFabricatorsById,
-    getAllFabricators
+    getAllFabricators,
+    updateFabricator
 } from '../controller/fabricator.controller.js';
 
 
@@ -14,3 +15,5 @@ fabricatorRouter.post('/create/', auth, createFabricator);
 fabricatorRouter.get('/all/', auth, getAllFabricators);
 
 fabricatorRouter.get('/:id/', auth, getFabricatorsById);
+
+fabricatorRouter.put('/:id/update', auth, updateFabricator);
