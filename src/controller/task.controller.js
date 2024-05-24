@@ -131,7 +131,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
             data.status = req.query.status;
         }
 
-        const task = await Task.find(data).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate('project.fabricator');
+        const task = await Task.find(data).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate({path:"project", populate:{path:"fabricator"}});
 
         if (!task) {
             throw new ApiError(404, "Task not found");
