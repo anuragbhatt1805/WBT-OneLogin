@@ -251,6 +251,14 @@ export const getProjectAllProjects = asyncHandler(async (req, res) => {
             data.active = req.query.active;
         }
 
+        if ("stage" in req.query) {
+            data.stage = req.query.stage;
+        }
+
+        if ("status" in req.query) {
+            data.status = req.query.status;
+        }
+
         const projects = await Project.find(data)
             .populate('fabricator modeler checker erecter detailer teamLeader')
             .populate('modeler.user')
