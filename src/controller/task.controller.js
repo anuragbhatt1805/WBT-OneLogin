@@ -71,7 +71,7 @@ export const getTask = asyncHandler( async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
-        const task = await Task.find({currentUser: req.user._id}).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
+        const task = await Task.findOne({currentUser: req.user._id}).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy');
 
         if (!task) {
             throw new ApiError(404, "Task not found");
