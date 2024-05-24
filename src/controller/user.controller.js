@@ -165,6 +165,8 @@ export const registerNewUser = asyncHandler(async (req, res) => {
             throw new ApiError(400, "User group not found");
         }
 
+        console.log(req.user);
+
         if (req?.user?.userGroup?.accessLevel !== "admin" || req?.user?.userGroup?.accessLevel !== "manager"){
             throw new ApiError(400, "Only admin or manager can add new users");
         }
