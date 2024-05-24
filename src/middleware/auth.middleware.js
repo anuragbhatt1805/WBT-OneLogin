@@ -14,7 +14,7 @@ export const auth = asyncHandler(async (req, res, next) => {
 
         const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-        const user = await User.findById(decoded?._id).select("-password -refreshToken -__v");
+        const user = await User.findById(decoded?._id).select("-password -refreshToken -__v").populate("userGroup");
 
         if (!user) {
             throw new ApiError(401, "Invalid token");
