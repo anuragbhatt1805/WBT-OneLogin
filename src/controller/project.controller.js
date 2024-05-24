@@ -15,6 +15,7 @@ export const createProject = asyncHandler(async (req, res) => {
         // if (!req.user.verified){
         //     throw new ApiError(400, "User not verified");
         // }
+        console.log(req.body);
 
         const { name, description } = req.body;
         const { fabricator } = req.body;

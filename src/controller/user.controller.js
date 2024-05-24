@@ -151,6 +151,8 @@ export const registerNewUser = asyncHandler(async (req, res) => {
             throw new ApiError(400, "Please provide user group");
         }
 
+        console.log(req.body);
+
         const { username, name, email, password } = req.body;
 
         if (!email || !password || !username || !name){
