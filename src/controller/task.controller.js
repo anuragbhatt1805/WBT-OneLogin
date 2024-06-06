@@ -357,7 +357,10 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
                     _id: 0,
                     taskId: '$_id',
                     taskTitle: '$title',
-                    assignId: '$assign._id'
+                    assignId: '$assign._id',
+                    assignedTo: '$assign.assignedTo',
+                    assignedBy: '$assign.assignedBy',
+                    project: '$project',
                 }
             }
         ]);
