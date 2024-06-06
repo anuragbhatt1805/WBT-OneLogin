@@ -351,17 +351,51 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
             { $unwind: '$assign' },
             // Match documents where assign.approved is false
             { $match: { 'assign.approved': false } },
+            // Lookup project details
+            {
+            $lookup: {
+                from: 'projects',
+                localField: 'project',
+                foreignField: '_id',
+                as: 'projectDetails'
+            }
+            },
+            // Lookup user details for assignedTo
+            {
+            $lookup: {
+                from: 'users',
+                localField: 'assign.assignedTo',
+                foreignField: '_id',
+                as: 'assignedToDetails'
+            }
+            },
+            // Lookup user details for assignedBy
+            {
+            $lookup: {
+                from: 'users',
+                localField: 'assign.assignedBy',
+                foreignField: '_id',
+                as: 'assignedByDetails'
+            }
+            },
             // Project the required fields
             {
-                $project: {
-                    _id: 0,
-                    taskId: '$_id',
-                    taskTitle: '$title',
-                    assignId: '$assign._id',
-                    assignedTo: '$assign.assignedTo',
-                    assignedBy: '$assign.assignedBy',
-                    project: '$project',
-                }
+            $project: {
+                _id: 0,
+                taskId: '$_id',
+                taskTitle: '$title',
+                assignId: '$assign._id',
+                assignedTo: {
+                $arrayElemAt: ['$assignedToDetails', 0]
+                },
+                assignedBy: {
+                $arrayElemAt: ['$assignedByDetails', 0]
+                },
+                project: {
+                $arrayElemAt: ['$projectDetails', 0]
+                },
+                status: '$status'
+            }
             }
         ]);
 
