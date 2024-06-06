@@ -19,9 +19,9 @@ export const createTask = asyncHandler(async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
-        const { project, assignedUser, title, description, startDate, dueDate } = req.body;
+        const { project, assignedUser, title, description, startDate, dueDate, priority } = req.body;
 
-        if (!project || !assignedUser || !title || !description || !startDate || !dueDate) {
+        if (!project || !assignedUser || !title || !description || !startDate || !dueDate || !priority) {
             throw new ApiError(400, "All fields are required");
         }
 
@@ -42,6 +42,7 @@ export const createTask = asyncHandler(async (req, res) => {
             createdBy: req.user._id,
             currentUser: assignedTo._id,
             title: title.trim(),
+            priority: Number.parseInt(priority),
             description: description.trim(),
             startDate: new Date(startDate),
             dueDate : new Date(dueDate),
