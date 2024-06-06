@@ -353,12 +353,20 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
             { $match: { 'assign.approved': false } },
             // Lookup project details
             {
-            $lookup: {
-                from: 'projects',
-                localField: 'project',
-                foreignField: '_id',
-                as: 'projectDetails'
-            }
+                $lookup: {
+                    from: 'projects',
+                    localField: 'project',
+                    foreignField: '_id',
+                    as: 'projectDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'project.teamLeader',
+                    foreignField: '_id',
+                    as: 'teamLeaderDetails'
+                }
             },
             // Lookup user details for assignedTo
             {
