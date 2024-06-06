@@ -335,3 +335,36 @@ export const getTaskById = asyncHandler( async (req, res) => {
         throw new ApiError(500, err.message);
     }
 });
+
+export const getApproveTaskLisk = asyncHandler( async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+
+        const results = await Task.aggregate([
+            // Unwind the assign array to deconstruct it
+            { $unwind: '$assign' },
+            // Match documents where assign.approved is false
+            { $match: { 'assign.approved': false } },
+            // Project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    taskId: '$_id',
+                    taskTitle: '$title',
+                    assignId: '$assign._id'
+                }
+            }
+        ]);
+
+        return res.status(200).json(new ApiResponse(200, results, "Tasks fetched successfully"));
+    } catch (err) {
+        console.log(err);
+        throw new ApiError(500, err.message);
+    }
+})
