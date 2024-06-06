@@ -18,7 +18,7 @@ export const createTask = asyncHandler(async (req, res) => {
         // if (!req.user.verified){
         //     throw new ApiError(400, "User not verified");
         // }
-        console.log(req.body);
+        // console.log(req.body);
         const { project, assignedUser, title, description, startDate, dueDate, priority } = req.body;
 
         if (!project || !assignedUser || !title || !description || !startDate || !dueDate || !priority) {
