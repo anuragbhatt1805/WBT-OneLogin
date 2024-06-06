@@ -304,12 +304,12 @@ export const commentTask = asyncHandler( async (req, res) => {
         }
 
         const {text} = req.body;
-        const files = req.files.map(file => path.join("/uploads", file.filename));
+        const files = req?.files?.map(file => path.join("/uploads", file.filename));
 
         task.comments.push({
             commentedBy: req.user._id,
             text: text.trim(),
-            files: files
+            files: files? files : []
         });
 
         await task.save();
