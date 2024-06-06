@@ -255,6 +255,7 @@ export const assignTask = asyncHandler( async (req, res) => {
 
         return res.status(200).json(new ApiResponse(200, task, "Task assigned successfully, waiting for approval"));
     } catch (err) {
+        console.log(err);
         throw new ApiError(500, err.message);
     }
 });
