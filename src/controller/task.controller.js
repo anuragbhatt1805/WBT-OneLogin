@@ -232,8 +232,8 @@ export const assignTask = asyncHandler( async (req, res) => {
         const project = await Project.findById(task.project);
 
         if (task.currentUser.toString() !== req.user._id.toString() 
-            || task.createdBy.toString() !== req.user._id.toString()
-            || project.teamLeader.toString() !== req.user._id.toString()){
+            && task.createdBy.toString() !== req.user._id.toString()
+            && project.teamLeader.toString() !== req.user._id.toString()){
             throw new ApiError(403, "You are not allowed to perform this action");
         }
 
