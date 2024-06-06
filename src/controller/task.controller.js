@@ -189,21 +189,22 @@ export const approveTask = asyncHandler( async (req, res) => {
             throw new ApiError(404, "Task not found");
         }
 
+        
         const project = await Project.findById(task.project);
-
+        
         if (req.user._id.toString() !== task.createdBy.toString() || req.user._id.toString() !== project.teamLeader.toString()) {
             throw new ApiError(403, "You are not allowed to perform this action");
         }
-
-        const taskAssign = await task.assign.find(assign => assign._id === req.body.assignId);
-
+        
+        const taskAssign = await task.assign.find(assign => assign._id.toString() === req.body.assignId);
+        
         if (!taskAssign) {
             throw new ApiError(404, "Task assign request not found");
         }
 
         taskAssign.approved = true;
         task.currentUser = taskAssign.assignedTo;
-        await taskAssign.save();
+        // await taskAssign.save();
         await task.save();
 
         return res.status(200).json(new ApiResponse(200, task, "Task approved successfully"));
