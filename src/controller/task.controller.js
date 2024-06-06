@@ -295,6 +295,8 @@ export const commentTask = asyncHandler( async (req, res) => {
         //     throw new ApiError(400, "User not verified");
         // }
 
+        console.log(req.body);
+
         const task = await Task.findById(req.params.taskId);
 
         if (!task) {
@@ -314,6 +316,7 @@ export const commentTask = asyncHandler( async (req, res) => {
 
         return res.status(200).json(new ApiResponse(200, task, "Task comment added successfully"));
     } catch (err) {
+        console.log(err);
         throw new ApiError(500, err.message);
     }
 });
