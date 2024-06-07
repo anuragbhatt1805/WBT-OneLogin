@@ -128,6 +128,7 @@ export const updateFabricator = asyncHandler(async (req, res) => {
        .json(new ApiResponse(200, fabricator, 'Fabricator updated successfully'));
 
     } catch (error) {
+console.log(error);
         throw new ApiError(500, error.message);
     }
 });
