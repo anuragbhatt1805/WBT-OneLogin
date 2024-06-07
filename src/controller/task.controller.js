@@ -448,9 +448,9 @@ export const updateTask = asyncHandler( async (req, res) => {
             status: status? status?.trim()?.toLowerCase() : task.status
         }
 
-        task = await Task.findByIdAndUpdate(task._id, data, { new: true });
+        const newTask = await Task.findByIdAndUpdate(task._id, data, { new: true });
 
-        return res.status(200).json(new ApiResponse(200, task, "Task updated successfully"));
+        return res.status(200).json(new ApiResponse(200, newTask, "Task updated successfully"));
     } catch (err) {
         console.log(err);
         throw new ApiError(500, err.message);
