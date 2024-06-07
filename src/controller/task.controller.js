@@ -87,6 +87,8 @@ export const getTask = asyncHandler( async (req, res) => {
 
 export const getAllTask = asyncHandler( async (req, res) => {
     try {
+
+        console.log(req.query);
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
@@ -141,6 +143,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
 
         return res.status(200).json(new ApiResponse(200, task, "Task fetched successfully"));
     } catch (err) {
+        console.error(err);
         throw new ApiError(500, err.message);
     }
 });
