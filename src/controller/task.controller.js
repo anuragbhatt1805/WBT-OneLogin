@@ -132,7 +132,7 @@ export const getAllTask = asyncHandler(async (req, res) => {
             data.status = req.query.status;
         }
 
-        const task = await Task.find(data).sort({ priority: -1 }).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate({ path: "project", populate: { path: "fabricator" } });
+        let task = await Task.find(data).sort({ priority: -1 }).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate({ path: "project", populate: { path: "fabricator" } });
 
         if (!task) {
             throw new ApiError(404, "Task not found");
@@ -140,10 +140,10 @@ export const getAllTask = asyncHandler(async (req, res) => {
 
         
         if ("fabricator" in req.query) {
-            const newTask = await task.filter(t => t.project.fabricator._id.toString() === req.query.fabricator);
+            task = await task.filter(t => t.project.fabricator._id.toString() === req.query.fabricator);
         }
 
-        return res.status(200).json(new ApiResponse(200, newTask, "Task fetched successfully"));
+        return res.status(200).json(new ApiResponse(200, task, "Task fetched successfully"));
     } catch (err) {
         console.error(err);
         throw new ApiError(500, err.message);
