@@ -103,9 +103,6 @@ export const getAllTask = asyncHandler(async (req, res) => {
             data.project = req.query.project;
         }
 
-        if ("fabricator" in req.query) {
-            data["project.fabricator"] = req.query.fabricator;
-        }
 
         if ("createdBy" in req.query) {
             data.createdBy = req.query.createdBy;
@@ -141,7 +138,12 @@ export const getAllTask = asyncHandler(async (req, res) => {
             throw new ApiError(404, "Task not found");
         }
 
-        return res.status(200).json(new ApiResponse(200, task, "Task fetched successfully"));
+        
+        if ("fabricator" in req.query) {
+            const newTask = await task.filter(t => t.project.fabricator._id.toString() === req.query.fabricator);
+        }
+
+        return res.status(200).json(new ApiResponse(200, newTask, "Task fetched successfully"));
     } catch (err) {
         console.error(err);
         throw new ApiError(500, err.message);
