@@ -65,7 +65,7 @@ export const Project_Schema = new mongoose.Schema({
     stage: {
         type: String,
         default: 'IFA',
-        enum: ['IFA', 'BFA', 'RIFA', 'BFA', 'IFC', 'REV'] 
+        enum: ['IFA', 'BFA', 'RIFA', 'RBFA', 'IFC', 'REV'] 
     },
     status: {
         type: String,
