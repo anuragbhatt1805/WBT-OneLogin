@@ -275,6 +275,7 @@ export const getProjectAllProjects = asyncHandler(async (req, res) => {
 
 export const updateProject = asyncHandler(async (req, res) => {
     try {
+        console.log(req.body)
         if (!req.user) {
             throw new ApiError(401, "Unauthorized");
         }
@@ -396,6 +397,7 @@ export const updateProject = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, updatedProject, "Project updated successfully"));
 
     } catch (err) {
+        console.log(err);
         throw new ApiError(500, err.message);
     }
 });
