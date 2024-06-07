@@ -85,7 +85,7 @@ export const getTask = asyncHandler( async (req, res) => {
     }
 });
 
-export const getAllTask = asyncHandler( async (req, res) => {
+export const getAllTask = asyncHandler(async (req, res) => {
     try {
 
         console.log(req.query);
@@ -104,7 +104,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
         }
 
         if ("fabricator" in req.query) {
-            data.project.fabricator = req.query.fabricator;
+            data["project.fabricator"] = req.query.fabricator;
         }
 
         if ("createdBy" in req.query) {
@@ -124,7 +124,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
                 case "medium":
                     data.priority = 2;
                     break;
-            
+
                 default:
                     data.priority = 1;
                     break;
@@ -135,7 +135,7 @@ export const getAllTask = asyncHandler( async (req, res) => {
             data.status = req.query.status;
         }
 
-        const task = await Task.find(data).sort({priority: -1}).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate({path:"project", populate:{path:"fabricator"}});
+        const task = await Task.find(data).sort({ priority: -1 }).populate('project').populate('createdBy').populate('currentUser').populate('assign.assignedTo').populate('assign.assignedBy').populate('comments.commentedBy').populate({ path: "project", populate: { path: "fabricator" } });
 
         if (!task) {
             throw new ApiError(404, "Task not found");
