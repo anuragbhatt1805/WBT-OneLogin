@@ -397,12 +397,24 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
             as: 'assignedByDetails'
             }
             },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'currentUser',
+                    foreignField: '_id',
+                    as: 'currentUserDetails'
+                }
+            },
             // Project the required fields
             {
             $project: {
             _id: 0,
             taskId: '$_id',
             taskTitle: '$title',
+            currentUser: {
+                $arrayElemAt: ['$currentUserDetails', 0]
+            },
+            taskDescription: '$description',
             assignId: '$assign._id',
             assignedTo: {
             $arrayElemAt: ['$assignedToDetails', 0]
@@ -416,7 +428,8 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
             teamLeader: {
             $arrayElemAt: ['$teamLeaderDetails', 0]
             },
-            status: '$status'
+            status: '$status',
+            priority: '$priority'
             }
             }
         ]);
