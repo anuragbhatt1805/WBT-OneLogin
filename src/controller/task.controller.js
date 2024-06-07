@@ -439,7 +439,7 @@ export const updateTask = asyncHandler( async (req, res) => {
 
         const { title, description, startDate, dueDate, priority, status } = req.body;
 
-        data = {
+        const data = {
             title: title? title?.trim() : task.title,
             description: description? description?.trim() : task.description,
             startDate: startDate? new Date(startDate) : task.startDate,
