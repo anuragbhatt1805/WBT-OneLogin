@@ -11,7 +11,8 @@ import {
     commentTask,
     getTaskComments,
     getTaskById,
-    getApproveTaskLisk
+    getApproveTaskLisk,
+    updateTask
 } from '../controller/task.controller.js';
 
 export const taskRouter = express.Router();
@@ -31,6 +32,8 @@ taskRouter.get('/:taskId/accept/', auth, acceptTask);
 taskRouter.post('/:taskId/approve/', auth, approveTask);
 
 taskRouter.post('/:taskId/assign/', auth, assignTask);
+
+taskRouter.post('/:taskId/update/', auth, updateTask);
 
 taskRouter.get('/:taskId/comments/', auth, getTaskComments);
 

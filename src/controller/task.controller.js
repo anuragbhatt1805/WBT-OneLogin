@@ -423,3 +423,37 @@ export const getApproveTaskLisk = asyncHandler( async (req, res) => {
         throw new ApiError(500, err.message);
     }
 })
+
+export const updateTask = asyncHandler( async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+        // if (!req.user.verified){
+        //     throw new ApiError(400, "User not verified");
+        // }
+        const task = await Task.findById(req.params.taskId);
+
+        if (!task) {
+            throw new ApiError(404, "Task not found");
+        }
+
+        const { title, description, startDate, dueDate, priority, status } = req.body;
+
+        data = {
+            title: title? title?.trim() : task.title,
+            description: description? description?.trim() : task.description,
+            startDate: startDate? new Date(startDate) : task.startDate,
+            dueDate: dueDate? new Date(dueDate) : task.dueDate,
+            priority: priority? Number.parseInt(priority.trim()) : task.priority,
+            status: status? status?.trim()?.toLowerCase() : task.status
+        }
+
+        task = await Task.findByIdAndUpdate(task._id, data, { new: true });
+
+        return res.status(200).json(new ApiResponse(200, task, "Task updated successfully"));
+    } catch (err) {
+        console.log(err);
+        throw new ApiError(500, err.message);
+    }
+});
