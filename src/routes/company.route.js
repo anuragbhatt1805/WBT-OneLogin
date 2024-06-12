@@ -16,3 +16,5 @@ companyRouter.get('/:id/', viewCompanyById);
 companyRouter.post('/register/', upload.fields([
     {name: 'logo', maxCount: 1}
 ]), registerCompanyAndUser);
+
+// npm start-local --host 0.0.0.0
