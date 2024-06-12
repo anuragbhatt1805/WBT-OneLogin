@@ -12,7 +12,7 @@ app.use(
 
 app.use(express.json({ limit: "64kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10000kb" }));
-app.use(express.static("Z:/oneLogin"));
+app.use(express.static("src/dist"));
 app.use(cookieParser());
 
 
@@ -23,6 +23,10 @@ import { groupRouter } from "./routes/usergroup.route.js";
 import { fabricatorRouter } from "./routes/fabricator.route.js";
 import { projectRouter } from "./routes/project.route.js";
 import { taskRouter } from "./routes/task.route.js";
+
+app.get("/", (req, res) => {
+  res.sendFile("index.html", { root: "dist" });
+})
 
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/user", userRouter);
