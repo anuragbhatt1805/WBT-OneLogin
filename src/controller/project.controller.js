@@ -97,69 +97,69 @@ export const createProject = asyncHandler(async (req, res) => {
             created_by: req.user._id
         });
 
-        // const modelerTask = await Task.create({
-        //     title: `${name} - Modeler`,
-        //     description: description? description.trim() : `Modeling for ${name}`,
-        //     startDate: new Date(modelerStart),
-        //     dueDate: new Date(modelerEnd),
-        //     project: project._id,
-        //     createdBy: req.user._id,
-        //     currentUser: modelerObject._id,
-        // })
-        // modelerTask.assign.push({
-        //     assignedTo: modelerObject._id,
-        //     assignedBy: req.user._id,
-        //     approved: true
-        // })
-        // await modelerTask.save();
+        const modelerTask = await Task.create({
+            title: `${name} - Modeler`,
+            description: description? description.trim() : `Modeling for ${name}`,
+            startDate: new Date(modelerStart),
+            dueDate: new Date(modelerEnd),
+            project: project._id,
+            createdBy: req.user._id,
+            currentUser: modelerObject._id,
+        })
+        modelerTask.assign.push({
+            assignedTo: modelerObject._id,
+            assignedBy: req.user._id,
+            approved: true
+        })
+        await modelerTask.save();
 
-        // const checkerTask = await Task.create({
-        //     title: `${name} - Checker`,
-        //     description: description? description.trim() : `Checking for ${name}`,
-        //     startDate: new Date(checkerStart),
-        //     dueDate: new Date(checkerEnd),
-        //     project: project._id,
-        //     createdBy: req.user._id,
-        //     currentUser: checkerObject._id,
-        // })
-        // checkerTask.assign.push({
-        //     assignedTo: checkerObject._id,
-        //     assignedBy: req.user._id,
-        //     approved: true
-        // })
-        // await checkerTask.save();
+        const checkerTask = await Task.create({
+            title: `${name} - Checker`,
+            description: description? description.trim() : `Checking for ${name}`,
+            startDate: new Date(checkerStart),
+            dueDate: new Date(checkerEnd),
+            project: project._id,
+            createdBy: req.user._id,
+            currentUser: checkerObject._id,
+        })
+        checkerTask.assign.push({
+            assignedTo: checkerObject._id,
+            assignedBy: req.user._id,
+            approved: true
+        })
+        await checkerTask.save();
 
-        // const erecterTask = await Task.create({
-        //     title: `${name} - Erecter`,
-        //     description: description? description.trim() : `Erecting for ${name}`,
-        //     startDate: new Date(erecterStart),
-        //     dueDate: new Date(erecterEnd),
-        //     project: project._id,
-        //     createdBy: req.user._id,
-        //     currentUser: erecterObject._id,
-        // })
-        // erecterTask.assign.push({
-        //     assignedTo: erecterObject._id,
-        //     assignedBy: req.user._id,
-        //     approved: true
-        // })
-        // await erecterTask.save();
+        const erecterTask = await Task.create({
+            title: `${name} - Erecter`,
+            description: description? description.trim() : `Erecting for ${name}`,
+            startDate: new Date(erecterStart),
+            dueDate: new Date(erecterEnd),
+            project: project._id,
+            createdBy: req.user._id,
+            currentUser: erecterObject._id,
+        })
+        erecterTask.assign.push({
+            assignedTo: erecterObject._id,
+            assignedBy: req.user._id,
+            approved: true
+        })
+        await erecterTask.save();
 
-        // const detailerTask = await Task.create({
-        //     title: `${name} - Detailer`,
-        //     description: description? description.trim() : `Detailing for ${name}`,
-        //     startDate: new Date(detailerStart),
-        //     dueDate: new Date(detailerEnd),
-        //     project: project._id,
-        //     createdBy: req.user._id,
-        //     currentUser: detailerObject._id,
-        // })
-        // detailerTask.assign.push({
-        //     assignedTo: detailerObject._id,
-        //     assignedBy: req.user._id,
-        //     approved: true
-        // })
-        // await detailerTask.save();
+        const detailerTask = await Task.create({
+            title: `${name} - Detailer`,
+            description: description? description.trim() : `Detailing for ${name}`,
+            startDate: new Date(detailerStart),
+            dueDate: new Date(detailerEnd),
+            project: project._id,
+            createdBy: req.user._id,
+            currentUser: detailerObject._id,
+        })
+        detailerTask.assign.push({
+            assignedTo: detailerObject._id,
+            assignedBy: req.user._id,
+            approved: true
+        })
+        await detailerTask.save();
 
         return res.status(201).json(new ApiResponse(201, project, "Project created successfully"));
     } catch (err) {
